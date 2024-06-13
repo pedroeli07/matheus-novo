@@ -68,12 +68,14 @@ Clone o repositório
 ```plaintext
 git clone https://github.com/pedroeli07/matheus-novo.git
 cd matheus-novo
-Crie e ative um ambiente virtual
 
-bash
-Copy code
+## Crie e ative um ambiente virtual
+
+```plaintext
 python -m venv myvenv
 source myvenv/bin/activate  # No Windows: myvenv\Scripts\activate
+
+##
 Instale as dependências
 
 bash

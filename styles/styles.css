@@ -1,0 +1,95 @@
+.button-confirm {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button-confirm:hover {
+    background-color: darkgreen;
+}
+
+.button-receipt {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button-receipt:hover {
+    background-color: darkblue;
+}
+
+.button-compensation {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 8px 50px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button-compensation:hover {
+    background-color: darkred;
+}
+
+.button-client {
+    background-color: purple;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button-client:hover {
+    background-color: darkpurple;
+}
+
+.button-upload {
+    background-color: darkred;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button-upload:hover {
+    background-color: darkred;
+}
+
+.center-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

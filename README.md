@@ -65,8 +65,7 @@ matheus-novo/
 Passos
 Clone o repositório
 
-bash
-Copy code
+```plaintext
 git clone https://github.com/pedroeli07/matheus-novo.git
 cd matheus-novo
 Crie e ative um ambiente virtual

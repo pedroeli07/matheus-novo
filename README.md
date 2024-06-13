@@ -68,25 +68,25 @@ Clone o repositório
 ```plaintext
 git clone https://github.com/pedroeli07/matheus-novo.git
 cd matheus-novo
-
+```
 ## Crie e ative um ambiente virtual
 
 ```plaintext
 python -m venv myvenv
 source myvenv/bin/activate  # No Windows: myvenv\Scripts\activate
-
+```
 ##
 Instale as dependências
 
-bash
-Copy code
+```plaintext
 pip install -r requirements.txt
-Execute a aplicação
+```
+## Execute a aplicação
 
-bash
-Copy code
+```plaintext
 streamlit run main.py
-Uso
+```
+## Uso
 Interface do Streamlit
 Ao executar o comando streamlit run main.py, a interface do Streamlit será aberta no navegador padrão. Aqui estão algumas funcionalidades que você pode usar:
 
@@ -100,33 +100,33 @@ Exemplo de Uso
 Selecionar Período e Loja
 Selecione a data desejada e a loja para filtrar os dados:
 
-python
-Copy code
+```plaintext
 data_desejada, numero_instalacao = selecionar_periodo_e_loja(df)
 confirmar_periodo_lojas_button(data_desejada, numero_instalacao)
 calcular_por_recebimento_button(RECEBIDO_RECEBIMENTO)
 calcular_por_compensacao_button(RECEBIDO_COMPENSACAO)
-Ajustar Valores
+```
+## Ajustar Valores
 Ajuste os valores de KWh da Cemig e o percentual de desconto:
 
-python
-Copy code
+```plaintext
 VALOR_KWH_CEMIG, DESCONTO = ajustar_valores_kwh_e_desconto(VALOR_KWH_CEMIG_PADRAO, DESCONTO_PADRAO)
 confirmar_valores_button(VALOR_KWH_CEMIG, DESCONTO)
-Visualizar Consumo e Geração Mensal
+```
+## Visualizar Consumo e Geração Mensal
 Visualize o consumo e a geração mensal de energia:
 
-python
-Copy code
+```plaintext
 monthly_data = calculate_consumption_generation(df_copy, calc_type)
 st.dataframe(monthly_data)
-Gerar e Baixar Relatórios
+```
+## Gerar e Baixar Relatórios
 Gere e baixe os relatórios em imagem e PDF:
 
-python
-Copy code
+```plaintext
 handle_download(img, cliente_text, VALOR_A_PAGAR)
-Contribuição
+```
+##Contribuição
 Sinta-se à vontade para contribuir com o projeto! Veja abaixo como você pode ajudar:
 
 Faça um fork do projeto

@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 from datetime import datetime
+from styles.style_df import style_dataframe
 
 # Inicializa o estado da sessão se ainda não definido
 if 'data_desejada' not in st.session_state or 'modalidade' not in st.session_state:
@@ -10,20 +11,66 @@ if 'data_desejada' not in st.session_state or 'modalidade' not in st.session_sta
     st.session_state.modalidade = [] 
 
 
+def load_css():
+    with open('styles/styles.css') as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+load_css()
+
 def load_data():
     """
     Carrega dados de um arquivo CSV ou XLSX para um DataFrame pandas.
-
+    
     Retorna:
         DataFrame pandas: O DataFrame carregado com os dados do arquivo.
     """
+    # Define CSS styles for the file uploader
+    uploader_style = """
+        <style>
+        .file-uploader {
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    # Opção para carregar arquivos CSV ou XLSX
-    uploaded_file = st.file_uploader(
-        "Escolha o arquivo CSV ou XLSX",  # Mensagem exibida ao usuário
-        type=["csv", "xlsx"]  # Tipos de arquivos permitidos
-    )
+        .file-uploader .file-input {
+            display: none;
+        }
 
+        .file-uploader .file-name {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .file-uploader .file-upload-button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .file-uploader .file-upload-button:hover {
+            background-color: #2980b9;
+        }
+        </style>
+    """
+
+    # Apply CSS styles to the file uploader
+    st.markdown(uploader_style, unsafe_allow_html=True)
+
+    with st.form("file_upload_form"):
+        uploaded_file = st.file_uploader(
+            "Escolha o arquivo CSV ou XLSX",  # Mensagem exibida ao usuário
+            type=["csv", "xlsx"],  # Tipos de arquivos permitidos
+            key="uploaded_file"  # Chave única para o elemento
+        )
+        submit_button = st.form_submit_button(label="Carregar Arquivo")
+            
     # Carrega o arquivo baseado no tipo
     if uploaded_file is not None:
         if uploaded_file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
@@ -57,8 +104,16 @@ def load_data():
             if modalidade is not None:  # Verifica se o valor foi encontrado no dicionário
                 df.loc[index, 'Modalidade'] = modalidade
 
-        # Exibe o DataFrame no Streamlit
-        st.write(df)
+        # Exibe os dados brutos
+        #st.markdown("<h5 style='color: #8cf595;'>Dados Brutos: </h5>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #8cf595;'>------------------Dados Brutos----------------------</h2>", unsafe_allow_html=True)
+        st.dataframe(df)
+        # Estiliza o DataFrame
+     #   styled_df = style_dataframe(df)
+
+        # Exibir o DataFrame estilizado no Streamlit com rolagem
+      #  st.dataframe(styled_df, height=300, width=800)  # Ajuste a altura e largura conforme necessário
+
 
         # Colunas a serem removidas
         cols_to_drop = [

@@ -1,95 +1,124 @@
-.button-confirm {
-    background-color: green;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
+/* Base styles for all buttons */
+button {
+    padding: 15px 30px;
     border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    margin: 5px;
+    transition: background-color 0.3s;
+    background-color: blue; /* Default background color */
 }
 
-.button-confirm:hover {
-    background-color: darkgreen;
+button:hover {
+    background-color: darkred;
 }
 
-.button-receipt {
+/* Specific styles for each button */
+button:nth-of-type(1) {
+    background-color: blue;
+}
+
+button:nth-of-type(2) {
+    background-color: green;
+}
+
+button:nth-of-type(3) {
+    background-color: red;
+}
+
+.stButton > button {
+    width: 100%;
     background-color: blue;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 20px;
-    margin: 4px 2px;
-    cursor: pointer;
+    padding: 15px 30px;
     border-radius: 8px;
-}
-
-.button-receipt:hover {
-    background-color: darkblue;
-}
-
-.button-compensation {
-    background-color: red;
-    color: white;
     border: none;
-    padding: 15px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 8px 50px;
     cursor: pointer;
-    border-radius: 8px;
+    margin: 5px;
+    transition: background-color 0.3s;
 }
 
-.button-compensation:hover {
+.stButton > button:hover {
     background-color: darkred;
 }
 
-.button-client {
-    background-color: purple;
+/* Remove the default form button style */
+.stForm button {
+    background-color: blue;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
+    padding: 15px 30px;
     border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.button-client:hover {
-    background-color: darkpurple;
+.stForm button:hover {
+    background-color: #8b0000;
 }
 
-.button-upload {
-    background-color: darkred;
+/* Custom styles for number input buttons */
+.stNumberInput button {
+    background-color: blue;
     color: white;
+    padding: 10px;
+    border-radius: 5px;
     border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
-    border-radius: 8px;
 }
 
-.button-upload:hover {
+.stNumberInput button:hover {
     background-color: darkred;
 }
 
-.center-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Custom styles for selectbox and multiselect options */
+.stSelectbox select, .stMultiselect select {
+    background-color: #ffffff;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+/* Custom styles for selected options */
+.stMultiselect div div {
+    background-color: #fdd2d2 !important;
+    color: white !important;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Estilo específico para o file uploader */
+.file-uploader {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-uploader .file-input {
+    display: none;
+}
+
+.file-uploader .file-name {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.file-uploader .file-upload-button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-uploader .file-upload-button:hover {
+    background-color: #2980b9;
 }

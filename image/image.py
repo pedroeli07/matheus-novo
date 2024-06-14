@@ -4,90 +4,108 @@ from helpers.utils import ordenar_periodo
 from fonts.fontys import fonts
 from data.formaters import format_value, format_currency
 
-
+# Função auxiliar para adicionar texto na imagem
 def add_text(draw, text, position, font, fill="black"):
     draw.text(position, text, fill=fill, font=font)
 
+# Função auxiliar para desenhar um retângulo na imagem
 def draw_rectangle(draw, coords, fill, outline="black"):
     draw.rectangle(coords, fill=fill, outline=outline)
 
+# Função principal para gerar a imagem com base nos dados fornecidos
 def generate_image(preprocessed_df, monthly_data, selected_columns, default_columns, calculo_tipo, RECEBIDO, VALOR_A_PAGAR, VALOR_KWH_CEMIG, DESCONTO, VALOR_KWH_FATURADO, economia_total, carbono_economia, cliente_text, mes_referencia, vencimento02):
+    # Carrega a imagem base
     img = Image.open('boleto_padrao04.png')
     draw = ImageDraw.Draw(img)
-    fontys = fonts()  # Carregar as fontes
+    
+    # Carrega as fontes
+    fontys = fonts()
 
-    # Formatação de valores
-    recebido_text = f"{int(RECEBIDO):,d}".replace(',', '.')
-    pos_x = 912 - (len(recebido_text) - 4) * 20
+    # Formatação de valores para exibição
+    recebido_text = f"{int(RECEBIDO):,d}".replace(',', '.')  # Formata o valor recebido
+    pos_x = 912 - (len(recebido_text) - 4) * 20  # Calcula a posição do texto recebido
+
+    # Determina o texto "acima" baseado no tipo de cálculo
     texto_acima = "RECEBIDO" if calculo_tipo == 'Recebimento' else "COMPENSADO"
-    text_width_acima = draw.textlength(texto_acima, font=fontys["bold3"])
-    pos_x_acima = 928 + (100 - text_width_acima) // 2
-    add_text(draw, texto_acima, (pos_x_acima, 1108), font=fontys["bold3"])
-    add_text(draw, recebido_text, (pos_x, 1168) if len(recebido_text) > 4 else (888, 1168), font=fontys["bold1"])
+    text_width_acima = draw.textlength(texto_acima, font=fontys["bold3"])  # Largura do texto acima
+    pos_x_acima = 928 + (100 - text_width_acima) // 2  # Calcula a posição do texto acima
+    add_text(draw, texto_acima, (pos_x_acima, 1108), font=fontys["bold3"])  # Adiciona o texto acima na imagem
+    add_text(draw, recebido_text, (pos_x, 1168) if len(recebido_text) > 4 else (888, 1168), font=fontys["bold1"])  # Adiciona o texto recebido na imagem
 
-    add_text(draw, str(mes_referencia), (440, 667), font=fontys["regular1"])
-    add_text(draw, str(vencimento02), (360, 702), font=fontys["regular1"])
-    add_text(draw, format_currency(economia_total), (1020, 2240), font=fontys["bold_eco"])
-    add_text(draw, f"{int(carbono_economia):,d} Kg".replace(',', '.'), (975, 2112), font=fontys["bold_carb"])
+    # Adiciona informações de referência e vencimento
+    add_text(draw, str(mes_referencia), (440, 667), font=fontys["regular1"])  # Mês de referência
+    add_text(draw, str(vencimento02), (360, 702), font=fontys["regular1"])  # Data de vencimento
 
-    add_text(draw, format_currency(VALOR_A_PAGAR), (880, 1407), font=fontys["bold1"])
-    add_text(draw, "VALOR A PAGAR", (850, 1337), font=fontys["bold2"])
+    # Adiciona economia total e economia de carbono
+    add_text(draw, format_currency(economia_total), (1020, 2240), font=fontys["bold_eco"])  # Economia total formatada
+    add_text(draw, f"{int(carbono_economia):,d} Kg".replace(',', '.'), (975, 2112), font=fontys["bold_carb"])  # Economia de carbono formatada
 
-    add_text(draw, cliente_text, (297, 631), font=fontys["regular1"])
-    add_text(draw, str(VALOR_KWH_CEMIG), (740, 663), font=fontys["bold4"])
-    add_text(draw, str(VALOR_KWH_FATURADO), (1310, 663), font=fontys["bold4"])
+    # Adiciona o valor a pagar
+    add_text(draw, format_currency(VALOR_A_PAGAR), (880, 1407), font=fontys["bold1"])  # Valor a pagar formatado
+    add_text(draw, "VALOR A PAGAR", (850, 1337), font=fontys["bold2"])  # Texto "VALOR A PAGAR"
 
+    # Adiciona o texto do cliente e valores de KWh
+    add_text(draw, cliente_text, (297, 631), font=fontys["regular1"])  # Texto do cliente
+    add_text(draw, str(VALOR_KWH_CEMIG), (740, 663), font=fontys["bold4"])  # Valor KWh CEMIG
+    add_text(draw, str(VALOR_KWH_FATURADO), (1310, 663), font=fontys["bold4"])  # Valor KWh faturado
+
+    # Adiciona o valor do desconto
     desconto_text = str(int(DESCONTO))
-    desconto_x = 970 if len(desconto_text) > 2 else 1015 if len(desconto_text) < 2 else 990
-    add_text(draw, desconto_text, (desconto_x, 663), font=fontys["bold4"])
+    desconto_x = 970 if len(desconto_text) > 2 else 1015 if len(desconto_text) < 2 else 990  # Calcula a posição do desconto
+    add_text(draw, desconto_text, (desconto_x, 663), font=fontys["bold4"])  # Adiciona o texto do desconto
 
-    # Processamento de DataFrame
-    monthly_data = ordenar_periodo(monthly_data).iloc[-12:]
-    dataframe_position1 = (225, 1130)
-    cell_width_df1, cell_height_base1, max_height1 = 180, 90, 330
-    num_rows = len(monthly_data) or 1
-    cell_height_df1 = min(cell_height_base1, max_height1 // num_rows)
+    # Processamento do DataFrame mensal
+    monthly_data = ordenar_periodo(monthly_data).iloc[-12:]  # Ordena e seleciona os últimos 12 períodos
+    dataframe_position1 = (225, 1130)  # Posição inicial do DataFrame
+    cell_width_df1, cell_height_base1, max_height1 = 180, 90, 330  # Dimensões das células
+    num_rows = len(monthly_data) or 1  # Número de linhas do DataFrame
+    cell_height_df1 = min(cell_height_base1, max_height1 // num_rows)  # Altura das células
+
+    # Adiciona cabeçalhos do DataFrame mensal
     for j, column_name in enumerate(monthly_data.columns):
         draw_rectangle(draw, [(dataframe_position1[0] + j * cell_width_df1, dataframe_position1[1]),
                               (dataframe_position1[0] + (j + 1) * cell_width_df1, dataframe_position1[1] + cell_height_df1)], 
-                              "#c1f0f0")
-        text_width = draw.textlength(column_name, font=fontys["bold_df2"])
-        add_text(draw, column_name, (dataframe_position1[0] + j * cell_width_df1 + (cell_width_df1 - text_width) // 2 , dataframe_position1[1] + 5), font=fontys["bold_df2"])
-    
+                              "#c1f0f0")  # Desenha o retângulo de fundo do cabeçalho
+        text_width = draw.textlength(column_name, font=fontys["bold_df2"])  # Largura do texto do cabeçalho
+        add_text(draw, column_name, (dataframe_position1[0] + j * cell_width_df1 + (cell_width_df1 - text_width) // 2 , dataframe_position1[1] + 5), font=fontys["bold_df2"])  # Adiciona o texto do cabeçalho
+
+    # Adiciona os dados do DataFrame mensal
     for i, (_, row) in enumerate(monthly_data.iterrows()):
         for j, cell_value in enumerate(row):
-            background_color = "#c1e0ff" if i == len(monthly_data) - 1 else "#F0F0F0"
+            background_color = "#c1e0ff" if i == len(monthly_data) - 1 else "#F0F0F0"  # Cor de fundo da célula
             draw_rectangle(draw, [(dataframe_position1[0] + j * cell_width_df1, dataframe_position1[1] + (i + 1) * cell_height_df1),
                                   (dataframe_position1[0] + (j + 1) * cell_width_df1, dataframe_position1[1] + (i + 2) * cell_height_df1)], 
-                                  background_color)
-            cell_text = str(format_value(cell_value)).upper() if i == len(monthly_data) - 1 and monthly_data.columns[j] == "Período" else str(format_value(cell_value))
-            text_font = fontys["extra_bold2"] if i == len(monthly_data) - 1 else fontys["df"]
-            text_width = draw.textlength(cell_text, font=text_font)
-            add_text(draw, cell_text, (dataframe_position1[0] + j * cell_width_df1 + (cell_width_df1 - text_width) // 2, dataframe_position1[1] + (i + 1) * cell_height_df1 + (cell_height_df1 - text_font.size) // 2), text_font)
+                                  background_color)  # Desenha o retângulo de fundo da célula
+            cell_text = str(format_value(cell_value)).upper() if i == len(monthly_data) - 1 and monthly_data.columns[j] == "Período" else str(format_value(cell_value))  # Texto da célula
+            text_font = fontys["extra_bold2"] if i == len(monthly_data) - 1 else fontys["df"]  # Fonte do texto
+            text_width = draw.textlength(cell_text, font=text_font)  # Largura do texto da célula
+            add_text(draw, cell_text, (dataframe_position1[0] + j * cell_width_df1 + (cell_width_df1 - text_width) // 2, dataframe_position1[1] + (i + 1) * cell_height_df1 + (cell_height_df1 - text_font.size) // 2), text_font)  # Adiciona o texto da célula
 
-    # Ajuste de DataFrame com as colunas selecionadas
-    dataframe_position, total_width, max_height, cell_height_base = (220, 870), 1250, 115, 90
-    cell_width_df = total_width // len(selected_columns) if selected_columns else total_width
-    preprocessed_df = preprocessed_df[selected_columns] if selected_columns else pd.DataFrame(columns=default_columns)
-    num_rows = len(preprocessed_df) or 1
-    cell_height_df = min(cell_height_base, max_height // num_rows)
-    
+    # Ajuste do DataFrame com as colunas selecionadas
+    dataframe_position, total_width, max_height, cell_height_base = (220, 870), 1250, 115, 90  # Posição e dimensões do DataFrame
+    cell_width_df = total_width // len(selected_columns) if selected_columns else total_width  # Largura das células
+    preprocessed_df = preprocessed_df[selected_columns] if selected_columns else pd.DataFrame(columns=default_columns)  # Seleciona as colunas do DataFrame pré-processado
+    num_rows = len(preprocessed_df) or 1  # Número de linhas do DataFrame
+    cell_height_df = min(cell_height_base, max_height // num_rows)  # Altura das células
+
+    # Adiciona cabeçalhos do DataFrame selecionado
     for j, column_name in enumerate(preprocessed_df.columns):
         draw_rectangle(draw, [(dataframe_position[0] + j * cell_width_df, dataframe_position[1]),
                               (dataframe_position[0] + (j + 1) * cell_width_df, dataframe_position[1] + cell_height_df)], 
-                              "#c1f0f0")
-        text_width = draw.textlength(column_name, font=fontys["bold_df3"])
-        add_text(draw, column_name, (dataframe_position[0] + j * cell_width_df + (cell_width_df - text_width) // 2, dataframe_position[1] + (cell_height_df - fontys["bold_df3"].size) // 2), font=fontys["bold_df3"])
-    
+                              "#c1f0f0")  # Desenha o retângulo de fundo do cabeçalho
+        text_width = draw.textlength(column_name, font=fontys["bold_df3"])  # Largura do texto do cabeçalho
+        add_text(draw, column_name, (dataframe_position[0] + j * cell_width_df + (cell_width_df - text_width) // 2, dataframe_position[1] + (cell_height_df - fontys["bold_df3"].size) // 2), font=fontys["bold_df3"])  # Adiciona o texto do cabeçalho
+
+    # Adiciona os dados do DataFrame selecionado
     for i, (_, row) in enumerate(preprocessed_df.iterrows()):
-        background_color = "#c1e0ff" if i == len(preprocessed_df) - 1 else "white"
-        text_font = fontys["extra_bold2"] if i == len(preprocessed_df) - 1 else fontys["df3"]
+        background_color = "#c1e0ff" if i == len(preprocessed_df) - 1 else "white"  # Cor de fundo da célula
+        text_font = fontys["extra_bold2"] if i == len(preprocessed_df) - 1 else fontys["df3"]  # Fonte do texto
         for j, cell_value in enumerate(row):
-            cell_text = str(format_value(cell_value))
-            text_width = draw.textlength(cell_text, font=text_font)
+            cell_text = str(format_value(cell_value))  # Texto da célula
+            text_width = draw.textlength(cell_text, font=text_font)  # Largura do texto da célula
             draw_rectangle(draw, [(dataframe_position[0] + j * cell_width_df, dataframe_position[1] + (i + 1) * cell_height_df),
                                   (dataframe_position[0] + (j + 1) * cell_width_df, dataframe_position[1] + (i + 2) * cell_height_df)], 
-                                  background_color)
-            add_text(draw, cell_text, (dataframe_position[0] + j * cell_width_df + (cell_width_df - text_width) // 2, dataframe_position[1] + (i + 1) * cell_height_df + (cell_height_df - text_font.size) // 2), text_font)
+                                  background_color)  # Desenha o retângulo de fundo da célula
+            add_text(draw, cell_text, (dataframe_position[0] + j * cell_width_df + (cell_width_df - text_width) // 2, dataframe_position[1] + (i + 1) * cell_height_df + (cell_height_df - text_font.size) // 2), text_font)  # Adiciona o texto da célula
 
-    return img
+    return img  # Retorna a imagem gerada

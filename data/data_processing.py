@@ -47,24 +47,30 @@ def prepare_dataframe(df_filtered2, VALOR_KWH_FATURADO, calculo_tipo):
     """
     # Criar uma cópia do DataFrame filtrado
     preprocessed_df = df_filtered2.copy()
+
     # Remover as colunas 'Transferido' e 'Geração'
     preprocessed_df.drop(['Transferido', 'Geração'], axis=1, inplace=True)
+
     # Filtrar linhas onde a coluna 'Modalidade' não é igual a 'Auto Consumo-Geradora'
     preprocessed_df = preprocessed_df.query("Modalidade != 'Auto Consumo-Geradora'")
+
     # Arredondar os valores de todas as colunas numéricas para duas casas decimais
     preprocessed_df = preprocessed_df.round(2)
-    
+
     # Calcular o valor da coluna 'Valor (R$)', com base na coluna selecionada pelo usuário e no valor do kWh faturado
     if calculo_tipo == 'Recebimento':
         preprocessed_df['Valor (R$)'] = preprocessed_df['Recebimento'] * VALOR_KWH_FATURADO
     else:
         preprocessed_df['Valor (R$)'] = preprocessed_df['Compensação'] * VALOR_KWH_FATURADO
-    
+
     # Renomear a coluna 'Modalidade' para 'Referência'
     preprocessed_df.rename(columns={'Modalidade': 'Referência'}, inplace=True)
+
+    # Excluir linhas onde os valores nas colunas 'Compensação' e 'Recebimento' são iguais a zero
+    preprocessed_df = preprocessed_df[(preprocessed_df['Compensação'] != 0) & (preprocessed_df['Recebimento'] != 0)]
+
     # Retornar o DataFrame preparado
     return preprocessed_df
-
 
 # Função para adicionar uma linha total ao DataFrame
 def add_total_row(preprocessed_df_filtered):
@@ -106,4 +112,6 @@ def add_total_row(preprocessed_df_filtered):
     
     # Retornar o DataFrame com a linha total adicionada
     return preprocessed_df_filtered
+
+
 
